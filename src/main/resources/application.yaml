@@ -1,0 +1,20 @@
+server:
+  port: 8090
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/senebank
+    username: postgres
+    password: rootroot
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+jwt:
+  secret: "c2VjcmV0X2tleV8yMDIzX21pcmVhLnNlbmViYW5rXzA1X3NlY3JldF9rZXk="
+  access-token-expiration-ms: 600 000
