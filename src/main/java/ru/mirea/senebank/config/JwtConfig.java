@@ -15,5 +15,6 @@ public class JwtConfig {
     public static final String TOKEN_PREFIX = "Barer ";
     private String secret;
     private int accessTokenExpirationMs;
+    private int refreshTokenExpirationMs;
 
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.mirea.senebank.config.JwtConfig;
 import ru.mirea.senebank.dto.security.TokenDto;
 import ru.mirea.senebank.dto.security.UserSecurityInfo;
+import ru.mirea.senebank.model.TypeToken;
 
 import javax.crypto.SecretKey;
 import java.time.LocalDateTime;
@@ -26,13 +27,17 @@ public class JwtService {
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
 
-    public TokenDto generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
-        int expirationTime = jwtConfig.getAccessTokenExpirationMs();
+    public TokenDto generateToken(String username, Collection<? extends GrantedAuthority> authorities,
+                                  TypeToken typeToken) {
+
+        int expirationTime = (typeToken == TypeToken.ACCESS
+                ? jwtConfig.getAccessTokenExpirationMs()
+                : jwtConfig.getRefreshTokenExpirationMs());
 
         Date expirationDate = new Date(new Date().getTime() + expirationTime);
         LocalDateTime expirationDateTime = expirationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
-        String accessToken = Jwts.builder()
+        String token = Jwts.builder()
                 .setIssuer("senebank-security-application")
                 .setSubject(username)
                 .claim("authorities", authorities)
@@ -42,7 +47,7 @@ public class JwtService {
                 .compact();
 
         return TokenDto.builder()
-                .token(JwtConfig.TOKEN_PREFIX.concat(accessToken))
+                .token(JwtConfig.TOKEN_PREFIX.concat(token))
                 .expirationDataTime(expirationDateTime)
                 .build();
     }

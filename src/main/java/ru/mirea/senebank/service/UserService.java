@@ -19,7 +19,7 @@ import ru.mirea.senebank.exception.UserEmailExistException;
 import ru.mirea.senebank.model.UserRole;
 import ru.mirea.senebank.repository.UserRepository;
 import ru.mirea.senebank.security.JwtService;
-import ru.mirea.senebank.security.UserModel;
+import ru.mirea.senebank.security.SecurityUser;
 import ru.mirea.senebank.service.mapper.UserMapper;
 
 import java.util.List;
@@ -68,31 +68,31 @@ public class UserService {
                 .build();
     }
 
-    public UserLoginResponse login(UserLoginRequest request) {
-        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
-
-        if (optionalUser.isEmpty()) {
-            throw new NoSuchUserException("User with email = '%s' not found".formatted(request.getEmail()));
-        }
-
-        User loadUser = optionalUser.get();
-
-        if (!passwordEncoder.matches(request.getPassword(), loadUser.getPassword())) {
-            throw new UsernameNotFoundException("Password not match");
-        }
-
-        UserModel user = new UserModel(loadUser);
-
-        TokenDto accessToken = jwtService.generateToken(user.getUsername(), user.getAuthorities());
-
-        return UserLoginResponse.builder()
-                .email(user.getUsername())
-                .roles(user.getAuthorities()
-                        .stream()
-                        .map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .accessToken(accessToken)
-                .build();
-    }
+//    public UserLoginResponse login(UserLoginRequest request) {
+//        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+//
+//        if (optionalUser.isEmpty()) {
+//            throw new NoSuchUserException("User with email = '%s' not found".formatted(request.getEmail()));
+//        }
+//
+//        User loadUser = optionalUser.get();
+//
+//        if (!passwordEncoder.matches(request.getPassword(), loadUser.getPassword())) {
+//            throw new UsernameNotFoundException("Password not match");
+//        }
+//
+//        SecurityUser user = new SecurityUser(loadUser);
+//
+//
+//
+//        return UserLoginResponse.builder()
+//                .email(user.getUsername())
+//                .roles(user.getAuthorities()
+//                        .stream()
+//                        .map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+//                .accessToken(accessToken)
+//                .build();
+//    }
 
     public User findUserById(Integer id) {
         return userRepository.findById(id)

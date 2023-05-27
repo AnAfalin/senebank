@@ -15,4 +15,5 @@ public class UserLoginResponse {
     private String email;
     private List<String> roles;
     private TokenDto accessToken;
+    private TokenDto refreshToken;
 }

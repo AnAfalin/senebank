@@ -2,17 +2,15 @@ package ru.mirea.senebank.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.mirea.senebank.entity.Role;
 import ru.mirea.senebank.entity.User;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class UserModel implements UserDetails {
+public class SecurityUser implements UserDetails {
     private final User user;
 
     @Override

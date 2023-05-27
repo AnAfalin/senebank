@@ -9,7 +9,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: true
@@ -18,3 +18,4 @@ spring:
 jwt:
   secret: "c2VjcmV0X2tleV8yMDIzX21pcmVhLnNlbmViYW5rXzA1X3NlY3JldF9rZXk="
   access-token-expiration-ms: 600 000
+  refresh-token-expiration-ms: 3 600 000
