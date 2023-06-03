@@ -35,7 +35,7 @@ public class JwtAccessTokenVerifier extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader(JwtConfig.HEADER);
 
         if (request.getServletPath().equals("/login")
-            || request.getServletPath().equals("/api/refresh/token")) {
+                || request.getServletPath().equals("/api/refresh-token")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -78,7 +78,7 @@ public class JwtAccessTokenVerifier extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String method = request.getMethod();
         String uri = request.getRequestURI();
-        if("POST".equals(method) && "/login".equals(uri)) {
+        if ("POST".equals(method) && "/login".equals(uri)) {
             return false;
         }
         return true;

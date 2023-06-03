@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.mirea.senebank.dto.info.ErrorResponse;
 import ru.mirea.senebank.dto.security.RefreshToken;
@@ -22,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 @RequiredArgsConstructor
 public class JwtRefreshTokenVerifier extends OncePerRequestFilter {
     private final JwtService jwtService;
@@ -32,15 +34,11 @@ public class JwtRefreshTokenVerifier extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) {
 
-        if (request.getServletPath().equals("/login")
-                || request.getServletPath().equals("/api/refresh/token")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String path = request.getRequestURI();
 
-        if (!path.contains("/api/refresh-token")) {
+        if (request.getServletPath().equals("/login")
+                || !request.getServletPath().equals("/api/refresh-token")
+                || !path.contains("/api/refresh-token")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,7 +51,6 @@ public class JwtRefreshTokenVerifier extends OncePerRequestFilter {
 
         String message;
         try {
-
             UserSecurityInfo userSecurityInfo = jwtService.validateToken(refreshToken.getToken());
 
             TokenDto newAccessToken = jwtService.generateToken(userSecurityInfo.getUsername(),
@@ -90,13 +87,5 @@ public class JwtRefreshTokenVerifier extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilterErrorDispatch() {
         return false;
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String method = request.getMethod();
-        String uri = request.getRequestURI();
-
-        return !"POST".equals(method) || !"/login".equals(uri);
     }
 }

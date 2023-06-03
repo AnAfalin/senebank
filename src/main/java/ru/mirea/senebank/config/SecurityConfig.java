@@ -47,7 +47,7 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                    .antMatchers(HttpMethod.POST, "/auth/**", "/api/refresh-token").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .exceptionHandling()
