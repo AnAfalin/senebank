@@ -79,8 +79,8 @@ public class JwtAccessTokenVerifier extends OncePerRequestFilter {
         String method = request.getMethod();
         String uri = request.getRequestURI();
         if ("POST".equals(method) && "/login".equals(uri)) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 }

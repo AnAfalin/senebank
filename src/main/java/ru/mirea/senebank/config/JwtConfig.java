@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
     public static final String HEADER = HttpHeaders.AUTHORIZATION;
-    public static final String TOKEN_PREFIX = "Barer ";
+    public static final String TOKEN_PREFIX = "Bearer ";
     private String secret;
     private int accessTokenExpirationMs;
     private int refreshTokenExpirationMs;
